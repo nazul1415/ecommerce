@@ -31,6 +31,9 @@ A production-ready e-commerce platform built with a micro-frontend & microservic
 * **Decision:** Leveraged Docker Compose service orchestration with dependency constraints (`depends_on` with `service_healthy`).
 * **Benefit:** Guarantees that backend and frontend services only attempt to start once PostgreSQL is fully ready to accept connections.
 
+### 4. Bussiness rules
+* **Decisions:** For the CSV file reading process, validations were added for currency and price (free) formats, as well as checks for duplicate SKUs and notifications. Add dummy image for the products and validate stock y purchase flow.
+
 ---
 
 ## 🚀 Getting Started
