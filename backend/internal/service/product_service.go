@@ -64,7 +64,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 			result.FailedCount++
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
-				Reason: "Número de columnas insuficiente",
+				Reason: "Insufficient number of columns",
 			})
 			continue
 		}
@@ -83,21 +83,21 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
 				SKU:    sku,
-				Reason: "SKU o Nombre vacíos",
+				Reason: "SKU r Name empty",
 			})
 			continue
 		}
 
 		// 2. duplicated on memory
 		if firstLine, exists := seenSKUs[sku]; exists {
-			log.Printf("[IMPORT WARNING] Línea %d: SKU '%s' duplicado (visto por primera vez en línea %d). Omitiendo.",
+			log.Printf("[IMPORT WARNING] Línea %d: SKU '%s' duolicated (seen online for the first time %d). Omitting.",
 				lineNumber, sku, firstLine)
 
 			result.FailedCount++
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
 				SKU:    sku,
-				Reason: fmt.Sprintf("SKU duplicado en la misma carga (visto primero en línea %d)", firstLine),
+				Reason: fmt.Sprintf("Duplicate SKU in the same shipment (first seen online) %d)", firstLine),
 			})
 			continue
 		}
@@ -107,7 +107,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
 				SKU:    sku,
-				Reason: "Formato de SKU inválido",
+				Reason: "SKU invalid format",
 			})
 			continue
 		}
@@ -126,7 +126,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 				result.Errors = append(result.Errors, domain.RowErrorDetail{
 					Line:   lineNumber,
 					SKU:    sku,
-					Reason: fmt.Sprintf("Precio inválido: %s", priceStr),
+					Reason: fmt.Sprintf("Invalid price: %s", priceStr),
 				})
 				continue
 			}
@@ -138,7 +138,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
 				SKU:    sku,
-				Reason: fmt.Sprintf("Stock inválido: %s", stockStr),
+				Reason: fmt.Sprintf("Invalid stock: %s", stockStr),
 			})
 			continue
 		}
@@ -149,7 +149,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 			result.Errors = append(result.Errors, domain.RowErrorDetail{
 				Line:   lineNumber,
 				SKU:    sku,
-				Reason: fmt.Sprintf("Peso inválido: %s", weightStr),
+				Reason: fmt.Sprintf("Invalid Weigth: %s", weightStr),
 			})
 			continue
 		}
@@ -169,7 +169,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 
 		if len(batch) >= batchSize {
 			if err := s.repo.ImportBulk(ctx, batch); err != nil {
-				log.Printf("[ERROR] Fallo al insertar lote de %d productos: %v", len(batch), err)
+				log.Printf("[ERROR] Filed to insert batch %d products: %v", len(batch), err)
 				result.FailedCount += len(batch)
 			} else {
 				result.ImportedCount += len(batch)
@@ -181,7 +181,7 @@ func (s *productService) ImportCSV(ctx context.Context, stream chan []string) (d
 	// Proccess chunk
 	if len(batch) > 0 {
 		if err := s.repo.ImportBulk(ctx, batch); err != nil {
-			log.Printf("[ERROR] Fallo al insertar lote remanente de %d productos: %v", len(batch), err)
+			log.Printf("[ERROR] Filed to insert batch %d products: %v", len(batch), err)
 			result.FailedCount += len(batch)
 		} else {
 			result.ImportedCount += len(batch)
