@@ -34,3 +34,30 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Binarios y compilados de Go
+/backend/main
+/backend/*.exe
+/backend/*.out
+
+# Módulos de Node.js y builds del Frontend
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
+**/out/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Entornos / Secretos (opcional)
+.env
+.env.local
