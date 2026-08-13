@@ -82,3 +82,5 @@ docker compose down -v
 docker compose up --build
 ```
 
+## Downloaded date of csv file
+August 11 2026
